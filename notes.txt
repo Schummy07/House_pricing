@@ -1,0 +1,72 @@
+ 2 - TREINAR O MODELO 
+
+import pandas as pd
+import pickle  ""biblioteca usada para salvar objetos compleos de python" 
+from sklearn.neighbors import KNeighborsRegressor
+
+# dataset simples
+df = pd.read_csv("data/dataset.csv")
+
+X = df[["sqft_living", "bedrooms", "bathrooms"]]
+y = df["price"]
+
+model = KNeighborsRegressor(n_neighbors=5)
+model.fit(X, y)
+
+with open("model/knn_model.pkl", "wb") as f:
+    pickle.dump(model, f)
+
+print("Modelo treinado e salvo")
+
+========================================================================================================================
+ 3 - FUNÇÃO DE PREVISAO 
+
+import pandas as pd
+import pickle
+from sklearn.neighbors import KNeighborsRegressor
+
+# dataset simples
+df = pd.read_csv("data/dataset.csv")
+
+X = df[["sqft_living", "bedrooms", "bathrooms"]]
+y = df["price"]
+
+model = KNeighborsRegressor(n_neighbors=5)
+model.fit(X, y)
+
+with open("model/knn_model.pkl", "wb") as f:
+    pickle.dump(model, f)
+
+print("Modelo treinado e salvo")
+
+=============================================================================================================================
+ 4 - CRIAR API 
+
+from fastapi import FastAPI
+from pydantic import BaseModel
+from predict import predict_price
+
+app = FastAPI()
+
+class House(BaseModel):
+
+    sqft_living: float
+    bedrooms: int
+    bathrooms: float
+
+
+@app.post("/predict")
+def predict(data: House):
+
+    result = predict_price(data.dict())
+
+    return {"prediction": result}
+
+============================================================================================================================
+
+ 5 - SUBIR O SEVIDOR 
+
+ python -m uvicorn app:app --reload
+
+ servidor: http://localhost:8000
+ documentação automática: http://localhost:8000/docs
