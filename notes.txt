@@ -70,3 +70,68 @@ def predict(data: House):
 
  servidor: http://localhost:8000
  documentação automática: http://localhost:8000/docs
+
+
+
+ ==============================================================================================================================
+ ==============================================================================================================================
+
+ O protocolo acima foi sugerido pelo chat gpt para elaborar uma API simples, recebe uma casa e sugere um preço a partir 
+ em vez disso eu decidi criar a minha versão de algoritmo KNN, simples e direta
+ o pxóximo passo é implantar o algoritmo KNN_teste.py e uma API usando o FastAPI
+
+ ================================================================================================================================
+ SUGESTÃO DO CHAT GPT 
+
+from fastapi import FastAPI
+from pydantic import BaseModel
+import pandas as pd
+
+from knn_model import KNN_felipe
+
+app = FastAPI()
+
+# carregar dataset apenas uma vez
+dataset = pd.read_csv("data/dataset.csv")
+
+variables = ["sqft_living", "bedrooms", "bathrooms"]
+
+K = 5
+
+
+class House(BaseModel):
+
+    sqft_living: float
+    bedrooms: int
+    bathrooms: float
+
+
+@app.post("/predict")
+def predict(data: House):
+
+    sample = data.model_dump()
+
+    sample_df = pd.DataFrame([sample])
+
+    price = KNN_felipe(
+        t_data=dataset,
+        variables=variables,
+        sample=sample_df,
+        neighborhood=K
+    )
+
+    return {"predicted_price": price}
+
+
+- caminho ---> http://127.0.0.1:8000/docs
+
+
+{"bedrooms": 3,
+ "bathrooms": 1,
+ "sqft_living": 1250,
+ "sqft_lot": 9774,
+ "floors": 1.0,
+ "sqft_above": 1250,
+ "lat": 47.3343,
+ "long": -122.306,
+ "house_age": 46}
