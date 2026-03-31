@@ -3,7 +3,7 @@ from pydantic import BaseModel
 import pandas as pd
 from typing import List
 
-from KNN_teste import KNN_felipe
+from House_pricing.bibliotecas_e_modelos.KNN_teste import KNN_felipe
 
 app = FastAPI()
 
