@@ -135,3 +135,19 @@ def predict(data: House):
  "lat": 47.3343,
  "long": -122.306,
  "house_age": 46}
+
+
+# =================================================================================================
+depois de muito tempo eu consegui implantar um algoritmo de XGBoos: 
+os parâmetros que eu usei no para treinar o XGBoot foram: 
+ - lambida :usado para critério de parada: se gain <= lambida return node = 0
+ - lambida: utilisado como mensuração para medir o gain = 1
+ - learning rate: multiplicador do weight obtido em cada árvore para o treino das árvores subsequentes = 0.2
+ - min_split = 5
+ - min_leaf = 2
+ - cicles = 20
+
+ O código de cálculo do XGBoos está disponível e documentado 
+
+ o modelo obtido foi salvo em json e deve ser usado para a elaboração de uma API do tipo champion chalenger, assim como no case House_pricing_value
+ 
